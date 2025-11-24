@@ -4,6 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>韓國冬季五日遊</title>
+    <script>
+      // Polyfill process.env for browser environment to support Gemini SDK
+      // The placeholder __GEMINI_API_KEY__ will be replaced by Netlify build command using sed
+      window.process = {
+        env: {
+          API_KEY: '__GEMINI_API_KEY__'
+        }
+      };
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -34,6 +43,7 @@
   <script type="importmap">
 {
   "imports": {
+    "react-dom/client": "https://aistudiocdn.com/react-dom@^19.2.0/client",
     "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
     "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
     "lucide-react": "https://aistudiocdn.com/lucide-react@^0.554.0",
@@ -45,5 +55,6 @@
 </head>
   <body class="bg-slate-50 text-slate-900 antialiased pb-20">
     <div id="root"></div>
+    <script type="module" src="./index.tsx"></script>
   </body>
 </html>
