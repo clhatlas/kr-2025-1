@@ -1,0 +1,31 @@
+export type ActivityType = 'sightseeing' | 'food' | 'transport' | 'stay' | 'flight';
+
+export interface Activity {
+  id: string;
+  time: string;
+  title: string;
+  location: string;
+  type: ActivityType;
+  details?: string;
+  lat?: number;
+  lng?: number;
+}
+
+export interface DayItinerary {
+  day: number;
+  date: string;
+  title: string;
+  activities: Activity[];
+}
+
+export interface AIData {
+  tips: string[];
+  mustEat: string[];
+  history: string;
+}
+
+export interface WeatherInfo {
+  temp: number;
+  condition: 'Sunny' | 'Cloudy' | 'Snow' | 'Rain';
+  description: string;
+}

@@ -1,0 +1,7 @@
+{
+  "name": "Korea 2025 Trip",
+  "description": "A smart, interactive itinerary for a 5-day trip to South Korea including flight details, budget tracking, and AI-powered travel tips.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
