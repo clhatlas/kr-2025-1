@@ -138,7 +138,7 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({ activity, isComplete
                 `}
             >
                 <Sparkles size={10} />
-                {expanded ? 'Collapse Data' : 'AI Intel'}
+                {expanded ? 'Collapse Data' : 'Details'}
             </button>
             )}
           </div>
@@ -179,7 +179,7 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({ activity, isComplete
                         <ul className="text-sm text-slate-700 space-y-2 list-none font-mono">
                             {aiData.tips.map((tip, i) => (
                                 <li key={i} className="flex gap-2 items-start">
-                                    <span className="text-cyan-500 mt-1">>></span>
+                                    <span className="text-cyan-500 mt-1">&gt;&gt;</span>
                                     <span className="flex-1">{tip}</span>
                                 </li>
                             ))}
