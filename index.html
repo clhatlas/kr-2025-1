@@ -3,10 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>韓國冬季五日遊</title>
+    <title>Korea 5 Days Trip - 2025</title>
     <script>
       // Polyfill process.env for browser environment
-      // The placeholder __API_KEY__ will be replaced by Netlify build command using sed
       window.process = {
         env: {
           API_KEY: '__API_KEY__'
@@ -18,20 +17,52 @@
       tailwind.config = {
         theme: {
           extend: {
+            fontFamily: {
+              sans: ['Inter', 'system-ui', 'sans-serif'],
+              mono: ['JetBrains Mono', 'Menlo', 'monospace'],
+            },
             colors: {
-              korea: {
-                red: '#C63B48',
-                blue: '#0F2C68',
-                sky: '#E7F1F6',
-                paper: '#FDFDFD',
+              tech: {
+                50: '#f0f4f8',
+                100: '#d9e2ec',
+                500: '#334e68',
+                900: '#102a43',
+                accent: '#06b6d4', // Cyan
+                alert: '#f43f5e', // Rose
+              }
+            },
+            animation: {
+              'fade-in': 'fadeIn 0.5s ease-out',
+              'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            },
+            keyframes: {
+              fadeIn: {
+                '0%': { opacity: '0', transform: 'translateY(10px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
               }
             }
           }
         }
       }
     </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <style>
-      /* Hide scrollbar for cleaner UI in horizontal scrolling */
+      body {
+        background-color: #f8fafc;
+        color: #1e293b;
+        font-family: 'Inter', sans-serif;
+      }
+      
+      /* Tech Grid Background */
+      .bg-grid-pattern {
+        background-size: 40px 40px;
+        background-image: 
+          linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+          linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+      }
+
       .no-scrollbar::-webkit-scrollbar {
         display: none;
       }
@@ -39,6 +70,57 @@
         -ms-overflow-style: none;
         scrollbar-width: none;
       }
+      
+      /* Tech Card */
+      .tech-border {
+        position: relative;
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid #e2e8f0;
+        backdrop-filter: blur(8px);
+      }
+      
+      /* Futuristic Marker */
+      .marker-tech {
+        background: rgba(6, 182, 212, 0.2);
+        border: 2px solid #06b6d4;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .marker-tech::after {
+        content: '';
+        width: 6px;
+        height: 6px;
+        background: #06b6d4;
+        border-radius: 50%;
+      }
+      .marker-tech-major {
+        background: rgba(244, 63, 94, 0.2);
+        border: 2px solid #f43f5e;
+        border-radius: 4px; /* Square for major */
+        transform: rotate(45deg);
+      }
+      .marker-tech-major::after {
+        content: '';
+        width: 8px;
+        height: 8px;
+        background: #f43f5e;
+      }
+
+      /* Corner Accents */
+      .corner-accent {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        border-color: #94a3b8;
+        border-style: solid;
+        transition: all 0.3s ease;
+      }
+      .top-left { top: 0; left: 0; border-width: 2px 0 0 2px; }
+      .top-right { top: 0; right: 0; border-width: 2px 2px 0 0; }
+      .bottom-left { bottom: 0; left: 0; border-width: 0 0 2px 2px; }
+      .bottom-right { bottom: 0; right: 0; border-width: 0 2px 2px 0; }
     </style>
   <script type="importmap">
 {
@@ -53,7 +135,7 @@
 }
 </script>
 </head>
-  <body class="bg-slate-50 text-slate-900 antialiased pb-20">
+  <body class="antialiased pb-20 selection:bg-cyan-100 selection:text-cyan-900 bg-grid-pattern">
     <div id="root"></div>
     <script type="module" src="./index.tsx"></script>
   </body>

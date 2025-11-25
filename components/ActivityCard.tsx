@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MapPin, Navigation, Utensils, Info, Check, Car, Bed, Plane, Sparkles, ChevronDown, ChevronUp } from 'lucide-react';
+import { MapPin, Navigation, Utensils, Info, Check, Car, Bed, Plane, Sparkles, ChevronUp, Terminal } from 'lucide-react';
 import { Activity } from '../types';
 
 interface ActivityCardProps {
@@ -12,23 +12,26 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({ activity, isComplete
   const [expanded, setExpanded] = useState(false);
   const aiData = activity.aiData;
 
+  const isMajor = activity.type === 'sightseeing' || activity.type === 'flight';
+
   const getIcon = () => {
     switch (activity.type) {
-      case 'food': return <Utensils size={18} className="text-orange-500" />;
-      case 'transport': return <Car size={18} className="text-blue-500" />;
-      case 'stay': return <Bed size={18} className="text-indigo-500" />;
-      case 'flight': return <Plane size={18} className="text-sky-500" />;
-      default: return <MapPin size={18} className="text-emerald-500" />;
+      case 'food': return <Utensils size={14} />;
+      case 'transport': return <Car size={14} />;
+      case 'stay': return <Bed size={14} />;
+      case 'flight': return <Plane size={14} />;
+      default: return <Terminal size={14} />;
     }
   };
 
-  const getTypeLabel = () => {
+  const getTypeColor = () => {
      switch (activity.type) {
-      case 'food': return '美食';
-      case 'transport': return '交通';
-      case 'stay': return '住宿';
-      case 'flight': return '航班';
-      default: return '景點';
+      case 'food': return 'text-orange-600 border-orange-200 bg-orange-50';
+      case 'transport': return 'text-slate-600 border-slate-200 bg-slate-50';
+      case 'sightseeing': return 'text-cyan-600 border-cyan-200 bg-cyan-50';
+      case 'stay': return 'text-indigo-600 border-indigo-200 bg-indigo-50';
+      case 'flight': return 'text-rose-600 border-rose-200 bg-rose-50';
+      default: return 'text-slate-600 border-slate-200 bg-slate-50';
     }
   };
 
@@ -37,107 +40,105 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({ activity, isComplete
     setExpanded(!expanded);
   };
 
-  // Google Maps Directions URL
-  // Uses location name as destination
   const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(activity.location)}`;
   
-  // Naver Map App URL Scheme
-  // Docs: https://guide.ncloud-docs.com/docs/en/naveropenapiv3-maps-url-scheme-url-scheme
   const getNaverNavUrl = () => {
     const appName = 'KoreaTrip2025';
     if (activity.lat && activity.lng) {
-        // route/car: Driving directions from current location to destination
-        // dname: Destination Name (Now using location name instead of activity title)
         return `nmap://route/car?dlat=${activity.lat}&dlng=${activity.lng}&dname=${encodeURIComponent(activity.location)}&appname=${appName}`;
     } else {
-        // Fallback to search if coordinates are missing
         return `nmap://search?query=${encodeURIComponent(activity.location)}&appname=${appName}`;
     }
   };
 
   const naverNavUrl = getNaverNavUrl();
-
-  // Only show button if we actually have hard-coded data AND it's a relevant type (Sightseeing or Food)
-  // Explicitly exclude Transport, Stay, Flight even if data exists
   const isInteractiveType = ['sightseeing', 'food'].includes(activity.type);
   const showAiButton = !!aiData && isInteractiveType;
 
   return (
-    <div className={`relative flex flex-col bg-white rounded-2xl shadow-sm border mb-4 transition-all duration-300 ${isCompleted ? 'border-slate-200 bg-slate-50 opacity-70' : 'border-slate-100'}`}>
+    <div className={`relative flex flex-col bg-white rounded-lg mb-4 transition-all duration-200 overflow-hidden group
+      ${isCompleted ? 'border border-green-300 opacity-60 grayscale' : 'border border-slate-200 shadow-sm'}
+      ${isMajor && !isCompleted ? 'border-l-4 border-l-cyan-500' : 'border-l border-l-slate-200'}
+    `}>
       
-      {/* Main Card Content */}
+      {/* Tech Decoration Lines */}
+      {!isCompleted && <div className="absolute top-0 right-0 w-8 h-8 border-t border-r border-slate-200 pointer-events-none rounded-tr-lg"></div>}
+      {!isCompleted && <div className="absolute bottom-0 left-0 w-8 h-8 border-b border-l border-slate-200 pointer-events-none rounded-bl-lg"></div>}
+
       <div className="flex items-start p-4 gap-3 cursor-pointer" onClick={() => { if(showAiButton) setExpanded(!expanded) }}>
-        {/* Checkbox Area */}
+        {/* Tech Checkbox */}
         <div className="pt-1">
           <button 
             onClick={(e) => { e.stopPropagation(); onToggle(activity.id); }}
-            className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${isCompleted ? 'bg-green-500 border-green-500 text-white' : 'border-slate-300 text-transparent hover:border-green-400'}`}
+            className={`w-5 h-5 flex items-center justify-center transition-all border
+              ${isCompleted 
+                ? 'bg-green-500 border-green-500 text-white' 
+                : 'bg-white border-slate-300 text-transparent hover:border-cyan-400'
+              }`}
           >
-            <Check size={14} strokeWidth={3} />
+            <Check size={12} strokeWidth={4} />
           </button>
         </div>
 
-        {/* Info Area */}
-        <div className="flex-1">
-          <div className="flex justify-between items-start">
-            <div className="flex items-center gap-2 mb-1">
-                <span className="font-mono text-sm font-bold text-slate-400 bg-slate-100 px-1.5 rounded">{activity.time}</span>
-                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border uppercase tracking-wide
-                    ${activity.type === 'food' ? 'text-orange-600 border-orange-200 bg-orange-50' : ''}
-                    ${activity.type === 'transport' ? 'text-blue-600 border-blue-200 bg-blue-50' : ''}
-                    ${activity.type === 'sightseeing' ? 'text-emerald-600 border-emerald-200 bg-emerald-50' : ''}
-                    ${activity.type === 'stay' ? 'text-indigo-600 border-indigo-200 bg-indigo-50' : ''}
-                    ${activity.type === 'flight' ? 'text-sky-600 border-sky-200 bg-sky-50' : ''}
-                `}>
-                    {getTypeLabel()}
-                </span>
-            </div>
+        {/* Content */}
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-2">
+             <span className="font-mono text-[10px] font-bold text-slate-500 bg-slate-100 px-1.5 py-0.5 border border-slate-200">
+                {activity.time}
+             </span>
+             <span className={`text-[9px] font-bold px-1.5 py-0.5 border uppercase tracking-wide font-mono ${getTypeColor()}`}>
+                {activity.type}
+            </span>
+            {isMajor && !isCompleted && <span className="w-1.5 h-1.5 bg-cyan-500 rounded-full animate-pulse"></span>}
           </div>
           
-          <h3 className={`font-bold text-lg text-slate-800 leading-tight mb-1 ${isCompleted ? 'line-through text-slate-400' : ''}`}>
+          <h3 className={`font-bold text-lg leading-tight mb-1 truncate font-sans tracking-tight ${isCompleted ? 'text-slate-400 line-through' : 'text-slate-900'}`}>
             {activity.title}
           </h3>
           
-          <div className="flex items-center gap-1 text-slate-500 text-sm mb-2">
+          <div className="flex items-center gap-1.5 text-slate-500 text-xs mb-3 font-mono">
             {getIcon()}
-            <span>{activity.location}</span>
+            <span className="truncate">{activity.location}</span>
           </div>
 
           {activity.details && (
-            <p className="text-sm text-slate-600 bg-slate-50 p-2 rounded-lg border border-slate-100 inline-block mb-2">
-              {activity.details}
-            </p>
+            <div className="text-xs text-slate-600 bg-slate-50 px-2 py-1.5 border-l-2 border-slate-300 mb-3 font-mono leading-relaxed">
+              // {activity.details}
+            </div>
           )}
 
           {/* Action Bar */}
-          <div className="flex flex-wrap items-center gap-2 mt-2">
+          <div className="flex flex-wrap items-center gap-2 mt-1">
             <a 
                 href={googleMapsUrl} 
                 target="_blank" 
                 rel="noopener noreferrer"
                 onClick={(e) => e.stopPropagation()}
-                className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-50 shadow-sm"
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 border border-slate-200 text-xs font-bold text-slate-600 hover:bg-slate-800 hover:text-white hover:border-slate-800 transition-colors uppercase tracking-wider font-mono"
             >
-                <MapPin size={14} /> Google Map
+                <MapPin size={10} /> Google
             </a>
             
             <a 
                 href={naverNavUrl} 
                 onClick={(e) => e.stopPropagation()}
-                className="flex items-center gap-1.5 px-3 py-1.5 bg-[#03C75A] border border-[#03C75A] rounded-lg text-xs font-semibold text-white hover:bg-[#02b350] shadow-sm shadow-green-100"
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 border border-slate-200 text-xs font-bold text-[#03C75A] hover:bg-[#03C75A] hover:text-white hover:border-[#03C75A] transition-all uppercase tracking-wider font-mono"
             >
-                <Navigation size={14} /> Naver Map
+                <Navigation size={10} /> Naver
             </a>
             
             {showAiButton && (
             <button
                 onClick={handleAiAnalysis}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold shadow-sm border transition-all
-                    ${expanded ? 'bg-purple-50 text-purple-700 border-purple-200' : 'bg-white text-slate-600 border-slate-200 hover:border-purple-300 hover:text-purple-600'}
+                className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold border transition-all uppercase tracking-wider font-mono
+                    ${expanded 
+                        ? 'bg-slate-800 text-white border-slate-800' 
+                        : 'bg-white text-slate-500 border-slate-200 hover:border-cyan-400 hover:text-cyan-600'
+                    }
                 `}
             >
-                <Sparkles size={14} />
-                {expanded ? '收起攻略' : '導遊攻略'}
+                <Sparkles size={10} />
+                {expanded ? 'Collapse Data' : 'AI Intel'}
             </button>
             )}
           </div>
@@ -146,48 +147,48 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({ activity, isComplete
 
       {/* Expanded AI Content */}
       {expanded && aiData && (
-        <div className="border-t border-slate-100 bg-slate-50/50 p-4 rounded-b-2xl animate-in fade-in slide-in-from-top-2 duration-200">
+        <div className="border-t border-slate-200 bg-slate-50 p-4">
              <div className="space-y-4">
                 
-                {/* History */}
-                <div className="flex gap-3">
-                    <div className="shrink-0 mt-0.5 text-purple-500"><Info size={16} /></div>
+                <div className="grid grid-cols-[24px_1fr] gap-3">
+                    <div className="mt-1 text-slate-400"><Info size={16} /></div>
                     <div>
-                        <h4 className="text-xs font-bold text-purple-900 uppercase tracking-wider mb-1">關於這裡</h4>
-                        <p className="text-sm text-slate-700 leading-relaxed">{aiData.history}</p>
+                        <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 font-mono border-b border-slate-200 pb-1">Historical_Data</h4>
+                        <p className="text-sm text-slate-700 leading-relaxed font-sans">{aiData.history}</p>
                     </div>
                 </div>
 
-                {/* Must Eat */}
-                <div className="flex gap-3">
-                    <div className="shrink-0 mt-0.5 text-orange-500"><Utensils size={16} /></div>
+                <div className="grid grid-cols-[24px_1fr] gap-3">
+                    <div className="mt-1 text-orange-400"><Utensils size={16} /></div>
                     <div>
-                        <h4 className="text-xs font-bold text-orange-900 uppercase tracking-wider mb-1">必吃美食</h4>
+                        <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 font-mono border-b border-slate-200 pb-1">Nutrient_Sources</h4>
                         <div className="flex flex-wrap gap-2">
                             {aiData.mustEat.map((food, i) => (
-                                <span key={i} className="text-xs bg-white border border-orange-200 text-orange-700 px-2 py-1 rounded-md shadow-sm font-medium">
-                                    {food}
+                                <span key={i} className="text-xs bg-white border border-slate-200 text-slate-700 px-2 py-1 font-mono">
+                                    [{food}]
                                 </span>
                             ))}
                         </div>
                     </div>
                 </div>
 
-                {/* Tips */}
-                <div className="flex gap-3">
-                    <div className="shrink-0 mt-0.5 text-emerald-500"><Sparkles size={16} /></div>
+                <div className="grid grid-cols-[24px_1fr] gap-3">
+                    <div className="mt-1 text-cyan-500"><Terminal size={16} /></div>
                     <div>
-                        <h4 className="text-xs font-bold text-emerald-900 uppercase tracking-wider mb-1">旅遊貼士</h4>
-                        <ul className="text-sm text-slate-700 space-y-1 list-disc list-outside pl-3">
+                        <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 font-mono border-b border-slate-200 pb-1">Tactical_Tips</h4>
+                        <ul className="text-sm text-slate-700 space-y-2 list-none font-mono">
                             {aiData.tips.map((tip, i) => (
-                                <li key={i}>{tip}</li>
+                                <li key={i} className="flex gap-2 items-start">
+                                    <span className="text-cyan-500 mt-1">>></span>
+                                    <span className="flex-1">{tip}</span>
+                                </li>
                             ))}
                         </ul>
                     </div>
                 </div>
 
                 <div className="text-center pt-2">
-                    <button onClick={() => setExpanded(false)} className="text-slate-400 hover:text-slate-600">
+                    <button onClick={() => setExpanded(false)} className="text-slate-300 hover:text-slate-500 transition-colors">
                         <ChevronUp size={20} className="mx-auto" />
                     </button>
                 </div>
