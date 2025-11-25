@@ -1,5 +1,5 @@
 import React from 'react';
-import { ITINERARY_DATA } from '../constants';
+import { ITINERARY_DATA, DAY_COLORS } from '../constants';
 import { ActivityCard } from './ActivityCard';
 import { WeatherWidget } from './WeatherWidget';
 
@@ -26,12 +26,12 @@ export const ItineraryView: React.FC<ItineraryViewProps> = ({ completedItems, on
             <button
               key={day.day}
               onClick={() => onDayChange(day.day)}
-              className={`flex-shrink-0 flex flex-col items-center min-w-[72px] px-2 py-2 border transition-all duration-200
-                ${selectedDay === day.day 
-                  ? 'bg-slate-900 text-white border-slate-900 shadow-md' 
-                  : 'bg-white text-slate-500 border-slate-200 hover:border-cyan-400'
-                }
-              `}
+              style={{
+                backgroundColor: selectedDay === day.day ? DAY_COLORS[day.day] : 'white',
+                borderColor: selectedDay === day.day ? DAY_COLORS[day.day] : '#e2e8f0',
+                color: selectedDay === day.day ? 'white' : '#64748b'
+              }}
+              className="flex-shrink-0 flex flex-col items-center min-w-[72px] px-2 py-2 border transition-all duration-200 hover:border-cyan-400"
             >
               <span className="text-[10px] uppercase font-bold tracking-widest font-mono">Day.{day.day}</span>
               <span className="text-xs font-bold mt-1 font-sans">{day.date.split(' ')[0]}</span>

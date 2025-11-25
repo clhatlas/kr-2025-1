@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ITINERARY_DATA } from '../constants';
+import { ITINERARY_DATA, DAY_COLORS } from '../constants';
 import { Calendar, MapPin, ExternalLink, Play, Map as MapIcon, ChevronRight, Target, Activity } from 'lucide-react';
 import { Activity as ActivityType } from '../types';
 
@@ -35,18 +35,54 @@ export const HomeView: React.FC<HomeViewProps> = ({ progress, onNavigate, setIti
 
     const markers: any[] = [];
 
-    // Add Markers
+    // Iterate through days to process markers
     ITINERARY_DATA.forEach((day) => {
+        let sightseeingCount = 0;
+
         day.activities.forEach((activity) => {
-            if (activity.lat && activity.lng) {
-                const isMajor = activity.type === 'sightseeing' || activity.type === 'stay';
-                const className = isMajor ? 'marker-tech-major' : 'marker-tech';
-                const size = isMajor ? 16 : 12;
+            // Only show Sightseeing locations on the interactive map
+            if (activity.lat && activity.lng && activity.type === 'sightseeing') {
+                sightseeingCount++;
+                const dayColor = DAY_COLORS[day.day] || '#64748b'; // Default slate if out of bounds
+
+                // Create Custom Numbered Marker HTML
+                const markerHtml = `
+                    <div style="
+                        background-color: ${dayColor};
+                        width: 24px;
+                        height: 24px;
+                        border-radius: 4px;
+                        border: 2px solid white;
+                        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        color: white;
+                        font-family: 'JetBrains Mono', monospace;
+                        font-weight: 800;
+                        font-size: 12px;
+                        position: relative;
+                    ">
+                        ${sightseeingCount}
+                        <div style="
+                            position: absolute;
+                            bottom: -6px;
+                            left: 50%;
+                            transform: translateX(-50%);
+                            width: 0; 
+                            height: 0; 
+                            border-left: 6px solid transparent;
+                            border-right: 6px solid transparent;
+                            border-top: 6px solid ${dayColor};
+                        "></div>
+                    </div>
+                `;
 
                 const icon = window.L.divIcon({
-                    className: className,
-                    iconSize: [size, size],
-                    iconAnchor: [size/2, size/2]
+                    className: 'custom-map-marker', // Dummy class to prevent default leaflet styles from interfering too much
+                    html: markerHtml,
+                    iconSize: [24, 30], // Height includes the little triangle
+                    iconAnchor: [12, 30] // Tip of the marker
                 });
 
                 const marker = window.L.marker([activity.lat, activity.lng], { icon })
@@ -129,6 +165,15 @@ export const HomeView: React.FC<HomeViewProps> = ({ progress, onNavigate, setIti
                 <MapIcon size={12} className="text-cyan-600" /> 
                 Tactical Map Overview
             </h3>
+            {/* Map Legend */}
+            <div className="flex gap-2">
+                {[1, 2, 3, 4, 5].map(d => (
+                    <div key={d} className="flex items-center gap-1">
+                        <div className="w-2 h-2 rounded-sm" style={{ backgroundColor: DAY_COLORS[d] }}></div>
+                        <span className="text-[8px] font-mono font-bold text-slate-400">D{d}</span>
+                    </div>
+                ))}
+            </div>
         </div>
         
         <div className="relative rounded-lg overflow-hidden border border-slate-300 shadow-sm h-[320px] bg-slate-100 group">
@@ -141,11 +186,11 @@ export const HomeView: React.FC<HomeViewProps> = ({ progress, onNavigate, setIti
             {/* Selected Activity Overlay */}
             {selectedActivity ? (
                  <div className="absolute bottom-4 left-4 right-4 bg-white/95 backdrop-blur-md border border-slate-900 p-0 rounded shadow-2xl animate-in slide-in-from-bottom-2 z-[1000] overflow-hidden">
-                    <div className="bg-slate-900 px-4 py-2 flex justify-between items-center">
-                         <span className="text-[10px] font-bold text-cyan-400 font-mono uppercase">
+                    <div className="px-4 py-2 flex justify-between items-center" style={{ backgroundColor: DAY_COLORS[selectedActivity.day] }}>
+                         <span className="text-[10px] font-bold text-white font-mono uppercase">
                                 Sector: Day {selectedActivity.day}
                         </span>
-                        <button onClick={() => setSelectedActivity(null)} className="text-slate-400 hover:text-white font-mono text-xs">[CLOSE]</button>
+                        <button onClick={() => setSelectedActivity(null)} className="text-white/80 hover:text-white font-mono text-xs">[CLOSE]</button>
                     </div>
                     <div className="p-4">
                         <h4 className="font-bold text-slate-900 text-lg leading-tight mb-1">{selectedActivity.activity.title}</h4>
@@ -154,7 +199,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ progress, onNavigate, setIti
                         </div>
                         <button 
                             onClick={handleJumpToItinerary}
-                            className="w-full bg-slate-100 hover:bg-cyan-50 border border-slate-300 hover:border-cyan-300 text-slate-800 py-2 rounded text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all"
+                            className="w-full bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-800 py-2 rounded text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all"
                         >
                             Access Data Log <ChevronRight size={14} />
                         </button>
@@ -187,7 +232,14 @@ export const HomeView: React.FC<HomeViewProps> = ({ progress, onNavigate, setIti
                         onNavigate('itinerary');
                     }}
                 >
-                    <div className="flex flex-col items-center justify-center w-10 h-10 border border-slate-200 bg-slate-50 text-slate-400 group-hover:text-cyan-600 group-hover:border-cyan-200 transition-colors">
+                    <div 
+                        className="flex flex-col items-center justify-center w-10 h-10 border transition-colors"
+                        style={{ 
+                            backgroundColor: `${DAY_COLORS[day.day]}15`, // 10% opacity hex
+                            borderColor: `${DAY_COLORS[day.day]}40`,
+                            color: DAY_COLORS[day.day]
+                        }}
+                    >
                         <span className="text-[8px] font-mono uppercase">Day</span>
                         <span className="text-sm font-bold font-mono">{day.day}</span>
                     </div>

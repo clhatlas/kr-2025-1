@@ -126,11 +126,11 @@ export default function App() {
       {/* Futuristic Bottom Navigation */}
       <nav className="fixed bottom-0 w-full max-w-md bg-white/95 backdrop-blur-xl border-t border-slate-200 flex justify-between items-center px-2 py-2 z-50 pb-safe">
         {[
-          { id: 'home', icon: Home, label: 'CMD' },
-          { id: 'itinerary', icon: Activity, label: 'LOG' },
-          { id: 'weather', icon: CloudSun, label: 'ENV' },
-          { id: 'essentials', icon: Zap, label: 'DAT' },
-          { id: 'budget', icon: Wallet, label: 'FIN' },
+          { id: 'home', icon: Home, label: '首頁' },
+          { id: 'itinerary', icon: Activity, label: '行程' },
+          { id: 'weather', icon: CloudSun, label: '天氣' },
+          { id: 'essentials', icon: Zap, label: '資訊' },
+          { id: 'budget', icon: Wallet, label: '預算' },
         ].map((item) => (
             <button 
               key={item.id}
@@ -144,7 +144,7 @@ export default function App() {
                 className={`transition-colors ${activeTab === item.id ? 'text-cyan-600' : 'text-slate-400 group-hover:text-slate-600'}`} 
                 strokeWidth={2}
               />
-              <span className={`text-[9px] font-mono font-bold tracking-widest ${activeTab === item.id ? 'text-slate-900' : 'text-slate-400'}`}>
+              <span className={`text-[10px] font-bold tracking-widest ${activeTab === item.id ? 'text-slate-900' : 'text-slate-400'}`}>
                 {item.label}
               </span>
             </button>

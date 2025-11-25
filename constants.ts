@@ -1,5 +1,14 @@
 import { DayItinerary } from './types';
 
+// Tech/Futuristic Palette for Days (Shared across views)
+export const DAY_COLORS: Record<number, string> = {
+    1: '#06b6d4', // Cyan (Day 1)
+    2: '#8b5cf6', // Violet (Day 2)
+    3: '#10b981', // Emerald (Day 3)
+    4: '#f97316', // Orange (Day 4)
+    5: '#ef4444', // Red (Day 5)
+};
+
 // Hardcoded flight times for notification logic (Year 2025 based on metadata)
 export const FLIGHT_SCHEDULE = [
   {
@@ -40,8 +49,8 @@ export const ITINERARY_DATA: DayItinerary[] = [
       }},
       { id: "d1-5", time: "14:00", type: "transport", title: "取車 (租車)", location: "Incheon Rent-a-car", details: "檢查國際駕照與護照", lat: 37.4563, lng: 126.7052 },
       { id: "d1-6", time: "15:30", type: "transport", title: "自駕前往加平", location: "Gapyeong-gun", lat: 37.8315, lng: 127.5097 },
-      { id: "d1-7", time: "17:15", type: "stay", title: "入住 Violin Glamping", location: "바이올린 글램핑 (Violin Glamping)", lat: 37.8765, lng: 127.5087 },
-      { id: "d1-8", time: "19:00", type: "food", title: "營地 BBQ 晚餐", location: "바이올린 글램핑 (Violin Glamping)", lat: 37.8765, lng: 127.5087 },
+      { id: "d1-7", time: "17:15", type: "stay", title: "入住 Violin Glamping", location: "바이올린 글램핑", lat: 37.8765, lng: 127.5087 },
+      { id: "d1-8", time: "19:00", type: "food", title: "營地 BBQ 晚餐", location: "바이올린 글램핑", lat: 37.8765, lng: 127.5087 },
     ]
   },
   {
@@ -80,7 +89,7 @@ export const ITINERARY_DATA: DayItinerary[] = [
     date: "12月19日 (週四)",
     title: "鐵道自行車 & 首爾",
     activities: [
-      { id: "d3-1", time: "07:30", type: "stay", title: "打包 & 提早退房", location: "바이올린 글램핑 (Violin Glamping)", lat: 37.8765, lng: 127.5087 },
+      { id: "d3-1", time: "07:30", type: "stay", title: "打包 & 提早退房", location: "바이올린 글램핑", lat: 37.8765, lng: 127.5087 },
       { id: "d3-2", time: "09:30", type: "transport", title: "抵達加平鐵道自行車", location: "Gapyeong Rail Park", lat: 37.8327, lng: 127.5110 },
       { id: "d3-3", time: "10:00", type: "sightseeing", title: "鐵道自行車體驗", location: "Gapyeong Rail Park", details: "約1.5小時", lat: 37.8327, lng: 127.5110, aiData: {
         tips: ["建議提前預約，以免現場票售罄。", "冬天騎行風大，請務必戴手套和帽子。", "路線包含穿越北漢江鐵橋，風景壯麗。"],
