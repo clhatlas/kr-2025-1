@@ -1,16 +1,17 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Plane, Calendar, Wallet, CheckCircle2 } from 'lucide-react';
+import { Plane, Calendar, Wallet, CheckCircle2, CloudSun } from 'lucide-react';
 import { ITINERARY_DATA, FLIGHT_SCHEDULE } from './constants';
 import { ItineraryView } from './components/ItineraryView';
 import { EssentialsView } from './components/EssentialsView';
 import { BudgetView } from './components/BudgetView';
+import { WeatherForecastView } from './components/WeatherForecastView';
 
 // Initialize AI Client (Safe to initialize here as we use env var in services, 
 // but checking if key exists is good practice for UI feedback)
 export const hasApiKey = !!process.env.API_KEY;
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<'itinerary' | 'essentials' | 'budget'>('itinerary');
+  const [activeTab, setActiveTab] = useState<'itinerary' | 'essentials' | 'budget' | 'weather'>('itinerary');
   const [completedItems, setCompletedItems] = useState<Set<string>>(() => {
     const saved = localStorage.getItem('completedItems');
     return saved ? new Set(JSON.parse(saved)) : new Set();
@@ -101,32 +102,43 @@ export default function App() {
         {activeTab === 'budget' && (
           <BudgetView />
         )}
+        {activeTab === 'weather' && (
+          <WeatherForecastView />
+        )}
       </main>
 
       {/* Bottom Navigation */}
-      <nav className="fixed bottom-0 w-full max-w-md bg-white border-t border-slate-200 flex justify-around py-3 px-2 z-50 pb-safe">
+      <nav className="fixed bottom-0 w-full max-w-md bg-white border-t border-slate-200 flex justify-between items-center py-3 px-6 z-50 pb-safe">
         <button 
           onClick={() => setActiveTab('itinerary')}
-          className={`flex flex-col items-center gap-1 p-2 rounded-xl transition-colors ${activeTab === 'itinerary' ? 'text-korea-blue bg-blue-50' : 'text-slate-400'}`}
+          className={`flex flex-col items-center gap-1 p-1 rounded-xl transition-colors ${activeTab === 'itinerary' ? 'text-korea-blue' : 'text-slate-400'}`}
         >
-          <Calendar size={24} />
-          <span className="text-[10px] font-medium">每日行程</span>
+          <Calendar size={24} strokeWidth={activeTab === 'itinerary' ? 2.5 : 2} />
+          <span className="text-[10px] font-medium">行程</span>
         </button>
         
         <button 
-          onClick={() => setActiveTab('essentials')}
-          className={`flex flex-col items-center gap-1 p-2 rounded-xl transition-colors ${activeTab === 'essentials' ? 'text-korea-blue bg-blue-50' : 'text-slate-400'}`}
+          onClick={() => setActiveTab('weather')}
+          className={`flex flex-col items-center gap-1 p-1 rounded-xl transition-colors ${activeTab === 'weather' ? 'text-korea-blue' : 'text-slate-400'}`}
         >
-          <Plane size={24} />
-          <span className="text-[10px] font-medium">重要資訊</span>
+          <CloudSun size={24} strokeWidth={activeTab === 'weather' ? 2.5 : 2} />
+          <span className="text-[10px] font-medium">天氣</span>
+        </button>
+
+        <button 
+          onClick={() => setActiveTab('essentials')}
+          className={`flex flex-col items-center gap-1 p-1 rounded-xl transition-colors ${activeTab === 'essentials' ? 'text-korea-blue' : 'text-slate-400'}`}
+        >
+          <Plane size={24} strokeWidth={activeTab === 'essentials' ? 2.5 : 2} />
+          <span className="text-[10px] font-medium">資訊</span>
         </button>
 
         <button 
           onClick={() => setActiveTab('budget')}
-          className={`flex flex-col items-center gap-1 p-2 rounded-xl transition-colors ${activeTab === 'budget' ? 'text-korea-blue bg-blue-50' : 'text-slate-400'}`}
+          className={`flex flex-col items-center gap-1 p-1 rounded-xl transition-colors ${activeTab === 'budget' ? 'text-korea-blue' : 'text-slate-400'}`}
         >
-          <Wallet size={24} />
-          <span className="text-[10px] font-medium">記帳/預算</span>
+          <Wallet size={24} strokeWidth={activeTab === 'budget' ? 2.5 : 2} />
+          <span className="text-[10px] font-medium">預算</span>
         </button>
       </nav>
     </div>

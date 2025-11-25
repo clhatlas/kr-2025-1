@@ -37,7 +37,9 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({ activity, isComplete
     setExpanded(!expanded);
   };
 
-  const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(activity.location)}`;
+  // Google Maps Directions URL
+  // Uses location name as destination
+  const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(activity.location)}`;
   
   // Naver Map App URL Scheme
   // Docs: https://guide.ncloud-docs.com/docs/en/naveropenapiv3-maps-url-scheme-url-scheme
@@ -45,14 +47,15 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({ activity, isComplete
     const appName = 'KoreaTrip2025';
     if (activity.lat && activity.lng) {
         // route/car: Driving directions from current location to destination
-        return `nmap://route/car?dlat=${activity.lat}&dlng=${activity.lng}&dname=${encodeURIComponent(activity.title)}&appname=${appName}`;
+        // dname: Destination Name (Now using location name instead of activity title)
+        return `nmap://route/car?dlat=${activity.lat}&dlng=${activity.lng}&dname=${encodeURIComponent(activity.location)}&appname=${appName}`;
     } else {
         // Fallback to search if coordinates are missing
         return `nmap://search?query=${encodeURIComponent(activity.location)}&appname=${appName}`;
     }
   };
 
-  const navUrl = getNaverNavUrl();
+  const naverNavUrl = getNaverNavUrl();
 
   // Only show button if we actually have hard-coded data AND it's a relevant type (Sightseeing or Food)
   // Explicitly exclude Transport, Stay, Flight even if data exists
@@ -109,21 +112,21 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({ activity, isComplete
           {/* Action Bar */}
           <div className="flex flex-wrap items-center gap-2 mt-2">
             <a 
-                href={mapsUrl} 
+                href={googleMapsUrl} 
                 target="_blank" 
                 rel="noopener noreferrer"
                 onClick={(e) => e.stopPropagation()}
                 className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-semibold text-slate-600 hover:bg-slate-50 shadow-sm"
             >
-                <MapPin size={14} /> 地圖
+                <MapPin size={14} /> Google Map
             </a>
             
             <a 
-                href={navUrl} 
+                href={naverNavUrl} 
                 onClick={(e) => e.stopPropagation()}
                 className="flex items-center gap-1.5 px-3 py-1.5 bg-[#03C75A] border border-[#03C75A] rounded-lg text-xs font-semibold text-white hover:bg-[#02b350] shadow-sm shadow-green-100"
             >
-                <Navigation size={14} /> Naver 導航
+                <Navigation size={14} /> Naver Map
             </a>
             
             {showAiButton && (

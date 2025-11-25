@@ -1,3 +1,4 @@
+
 export type ActivityType = 'sightseeing' | 'food' | 'transport' | 'stay' | 'flight';
 
 export interface AIData {
@@ -29,4 +30,12 @@ export interface WeatherInfo {
   temp: number;
   condition: 'Sunny' | 'Cloudy' | 'Snow' | 'Rain';
   description: string;
+}
+
+export interface DailyForecast {
+  date: string;
+  maxTemp: number;
+  minTemp: number;
+  weatherCode: number;
+  precipProb: number;
 }
