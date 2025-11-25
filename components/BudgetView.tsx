@@ -1,5 +1,5 @@
 import React from 'react';
-import { Wallet } from 'lucide-react';
+import { Wallet, ExternalLink } from 'lucide-react';
 
 export const BudgetView: React.FC = () => {
   return (
@@ -22,9 +22,17 @@ export const BudgetView: React.FC = () => {
         </div>
 
         {/* Notion Embed 1 - Original */}
-        <div className="w-full bg-slate-50 border-b-4 border-slate-100">
-            <div className="px-4 py-2 bg-slate-100/50 text-xs font-bold text-slate-400 uppercase tracking-wider">
-                行程總表
+        <div className="w-full bg-slate-50 border-b-4 border-slate-100 relative group">
+            <div className="px-4 py-2 bg-slate-100/50 text-xs font-bold text-slate-400 uppercase tracking-wider flex justify-between items-center">
+                <span>行程總表</span>
+                <a 
+                  href="https://atlasc.notion.site/2a3715191af78107a152de2bf2799709" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-blue-500 hover:text-blue-700 flex items-center gap-1"
+                >
+                  <ExternalLink size={10} />
+                </a>
             </div>
             <iframe 
                 src="https://atlasc.notion.site/ebd/2a3715191af78107a152de2bf2799709" 
@@ -33,24 +41,42 @@ export const BudgetView: React.FC = () => {
                 frameBorder="0" 
                 allowFullScreen 
                 title="Notion Budget Table 1"
+                className="bg-white"
             />
         </div>
 
-        {/* Notion Embed 2 - New */}
+        {/* Notion Embed 2 - Fixed URL */}
         <div className="w-full bg-slate-50">
-            <div className="px-4 py-2 bg-slate-100/50 text-xs font-bold text-slate-400 uppercase tracking-wider">
-                詳細支出明細
+            <div className="px-4 py-2 bg-slate-100/50 text-xs font-bold text-slate-400 uppercase tracking-wider flex justify-between items-center">
+                <span>詳細支出明細</span>
+                <a 
+                  href="https://atlasc.notion.site/2a3715191af78150a144ee074c43b171?v=2a3715191af7813f8128000c38dd8393" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-blue-500 hover:text-blue-700 flex items-center gap-1"
+                >
+                  <ExternalLink size={10} />
+                </a>
             </div>
+            {/* 
+                Fixed: Converted 'www.notion.so/atlasc/' to 'atlasc.notion.site/ebd/' 
+                This uses the public embed endpoint instead of the internal workspace link.
+            */}
             <iframe 
-                src="https://www.notion.so/atlasc/2a3715191af78150a144ee074c43b171?v=2a3715191af7813f8128000c38dd8393&source=copy_link" 
+                src="https://atlasc.notion.site/ebd/2a3715191af78150a144ee074c43b171?v=2a3715191af7813f8128000c38dd8393" 
                 width="100%" 
                 height="500" 
                 frameBorder="0" 
                 allowFullScreen 
                 title="Notion Budget Table 2"
+                className="bg-white"
             />
         </div>
       </div>
+      
+      <p className="text-[10px] text-slate-400 text-center px-8">
+        如果表格無法顯示，請點擊標題旁的箭頭圖示 <ExternalLink size={10} className="inline" /> 在 Notion App 中開啟。
+      </p>
 
     </div>
   );
