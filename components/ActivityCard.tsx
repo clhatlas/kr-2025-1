@@ -54,8 +54,10 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({ activity, isComplete
 
   const navUrl = getNaverNavUrl();
 
-  // Only show button if we actually have hard-coded data
-  const showAiButton = !!aiData;
+  // Only show button if we actually have hard-coded data AND it's a relevant type (Sightseeing or Food)
+  // Explicitly exclude Transport, Stay, Flight even if data exists
+  const isInteractiveType = ['sightseeing', 'food'].includes(activity.type);
+  const showAiButton = !!aiData && isInteractiveType;
 
   return (
     <div className={`relative flex flex-col bg-white rounded-2xl shadow-sm border mb-4 transition-all duration-300 ${isCompleted ? 'border-slate-200 bg-slate-50 opacity-70' : 'border-slate-100'}`}>
@@ -160,4 +162,35 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({ activity, isComplete
                         <h4 className="text-xs font-bold text-orange-900 uppercase tracking-wider mb-1">必吃美食</h4>
                         <div className="flex flex-wrap gap-2">
                             {aiData.mustEat.map((food, i) => (
-                                <span key={i} className="text-xs bg-white border border
+                                <span key={i} className="text-xs bg-white border border-orange-200 text-orange-700 px-2 py-1 rounded-md shadow-sm font-medium">
+                                    {food}
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Tips */}
+                <div className="flex gap-3">
+                    <div className="shrink-0 mt-0.5 text-emerald-500"><Sparkles size={16} /></div>
+                    <div>
+                        <h4 className="text-xs font-bold text-emerald-900 uppercase tracking-wider mb-1">旅遊貼士</h4>
+                        <ul className="text-sm text-slate-700 space-y-1 list-disc list-outside pl-3">
+                            {aiData.tips.map((tip, i) => (
+                                <li key={i}>{tip}</li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
+
+                <div className="text-center pt-2">
+                    <button onClick={() => setExpanded(false)} className="text-slate-400 hover:text-slate-600">
+                        <ChevronUp size={20} className="mx-auto" />
+                    </button>
+                </div>
+             </div>
+        </div>
+      )}
+    </div>
+  );
+};
