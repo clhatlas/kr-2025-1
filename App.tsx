@@ -75,7 +75,7 @@ export default function App() {
                 <Map size={16} />
             </div>
             <h1 className="text-lg font-bold text-slate-900 tracking-tighter uppercase font-mono">
-              SEOUL<span className="text-cyan-600">_OS</span> <span className="text-xs text-slate-400">v2.5</span>
+              SEOUL <span className="text-cyan-600">DEC 2025</span>
             </h1>
           </div>
           <div className="flex items-center gap-2">

@@ -13,15 +13,15 @@ const getWeatherIcon = (code: number, size = 24) => {
 
 const getWeatherDescription = (code: number): string => {
     const map: Record<number, string> = {
-      0: 'CLEAR', 1: 'MOSTLY CLEAR', 2: 'PARTLY CLOUDY', 3: 'OVERCAST',
-      45: 'FOG', 48: 'DEPOSITING RIME FOG',
-      51: 'LIGHT DRIZZLE', 53: 'DRIZZLE', 55: 'HEAVY DRIZZLE',
-      61: 'SLIGHT RAIN', 63: 'RAIN', 65: 'HEAVY RAIN',
-      71: 'SLIGHT SNOW', 73: 'SNOW', 75: 'HEAVY SNOW',
-      80: 'SHOWERS', 81: 'HEAVY SHOWERS', 82: 'VIOLENT SHOWERS',
-      95: 'THUNDERSTORM'
+      0: '晴朗', 1: '大致晴朗', 2: '多雲', 3: '陰天',
+      45: '起霧', 48: '霧',
+      51: '毛毛雨', 53: '毛毛雨', 55: '毛毛雨',
+      61: '小雨', 63: '中雨', 65: '大雨',
+      71: '小雪', 73: '中雪', 75: '大雪',
+      80: '陣雨', 81: '陣雨', 82: '陣雨',
+      95: '雷雨'
     };
-    return map[code] || 'CLOUDY';
+    return map[code] || '多雲';
 };
 
 export const WeatherForecastView: React.FC = () => {
@@ -80,10 +80,10 @@ export const WeatherForecastView: React.FC = () => {
             <div>
                 <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2 uppercase tracking-tighter">
                     <Wind className="text-cyan-600" size={20} />
-                    Atmospheric Data
+                    氣象數據
                 </h2>
                 <p className="text-[10px] text-slate-500 mt-1 font-mono uppercase tracking-widest">
-                    Predictive Model // Dec 17-21
+                    預測模型 // 12月 17-21
                 </p>
             </div>
         </div>
@@ -91,7 +91,7 @@ export const WeatherForecastView: React.FC = () => {
         {loading ? (
             <div className="flex flex-col items-center justify-center py-20 text-slate-400">
                 <Loader2 className="animate-spin mb-3 text-cyan-600" size={32} />
-                <span className="text-xs font-mono tracking-widest uppercase">Initializing Sensors...</span>
+                <span className="text-xs font-mono tracking-widest uppercase">讀取感測器...</span>
             </div>
         ) : (
             <div className="space-y-3">
@@ -145,7 +145,7 @@ export const WeatherForecastView: React.FC = () => {
 
                 <div className="mt-6 border-t border-slate-200 pt-4 text-center">
                     <p className="text-[9px] text-slate-400 leading-relaxed font-mono uppercase tracking-wider">
-                        // CAUTION: Weather patterns are subject to change based on real-time atmospheric conditions.
+                        // 注意：天氣狀況可能隨時變化，請以即時資訊為準。
                     </p>
                 </div>
             </div>

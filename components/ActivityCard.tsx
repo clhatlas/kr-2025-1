@@ -138,7 +138,7 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({ activity, isComplete
                 `}
             >
                 <Sparkles size={10} />
-                {expanded ? 'Collapse Data' : 'Details'}
+                {expanded ? '收起資訊' : '詳細資訊'}
             </button>
             )}
           </div>
@@ -153,7 +153,7 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({ activity, isComplete
                 <div className="grid grid-cols-[24px_1fr] gap-3">
                     <div className="mt-1 text-slate-400"><Info size={16} /></div>
                     <div>
-                        <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 font-mono border-b border-slate-200 pb-1">Historical_Data</h4>
+                        <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 font-mono border-b border-slate-200 pb-1">歷史背景</h4>
                         <p className="text-sm text-slate-700 leading-relaxed font-sans">{aiData.history}</p>
                     </div>
                 </div>
@@ -161,7 +161,7 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({ activity, isComplete
                 <div className="grid grid-cols-[24px_1fr] gap-3">
                     <div className="mt-1 text-orange-400"><Utensils size={16} /></div>
                     <div>
-                        <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 font-mono border-b border-slate-200 pb-1">Nutrient_Sources</h4>
+                        <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 font-mono border-b border-slate-200 pb-1">美食情報</h4>
                         <div className="flex flex-wrap gap-2">
                             {aiData.mustEat.map((food, i) => (
                                 <span key={i} className="text-xs bg-white border border-slate-200 text-slate-700 px-2 py-1 font-mono">
@@ -175,7 +175,7 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({ activity, isComplete
                 <div className="grid grid-cols-[24px_1fr] gap-3">
                     <div className="mt-1 text-cyan-500"><Terminal size={16} /></div>
                     <div>
-                        <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 font-mono border-b border-slate-200 pb-1">Tactical_Tips</h4>
+                        <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 font-mono border-b border-slate-200 pb-1">實用貼士</h4>
                         <ul className="text-sm text-slate-700 space-y-2 list-none font-mono">
                             {aiData.tips.map((tip, i) => (
                                 <li key={i} className="flex gap-2 items-start">
