@@ -114,10 +114,10 @@ export const ITINERARY_DATA: DayItinerary[] = [
         mustEat: ["土俗村蔘雞湯", "通仁市場油亮炒年糕", "韓式傳統定食"],
         history: "景福宮是朝鮮王朝的法宮，建於1395年，見證了朝鮮五百年的歷史興衰，是首爾最具代表性的古蹟。"
       }},
-      { id: "d4-2", time: "12:30", type: "sightseeing", title: "仁寺洞 (傳統工藝)", location: "Insadong", lat: 37.5743, lng: 126.9860, aiData: {
-        tips: ["人人廣場 (Ssamzigil) 結構獨特，值得一逛。", "巷弄間隱藏許多傳統茶屋。", "適合購買具有韓國特色的紀念品。"],
-        mustEat: ["黑糖餅 (糖餡餅)", "傳統紅豆冰", "韓式宮廷料理"],
-        history: "仁寺洞自古以來便是藝術家與文人的聚集地，現今仍保留著濃厚的傳統文化氣息與古董街風貌。"
+      { id: "d4-2", time: "12:30", type: "sightseeing", title: "弘大商店街 & T1 Base Camp", location: "Hongdae & T1 Base Camp", lat: 37.5563, lng: 126.9236, aiData: {
+        tips: ["T1 Base Camp 位於弘大入口站1號出口附近，是電競迷必朝聖地。", "建議先在弘大商圈逛街，下午再去 T1 Base Camp 體驗。", "店內有販售 T1 戰隊周邊商品及提供高規格網咖體驗。"],
+        mustEat: ["弘大烤腸 (Gopchang)", "豬腳小姐 (Myth Jakbol)", "T1 Base Camp 泡麵套餐"],
+        history: "弘大以弘益大學為中心，是年輕藝術與次文化的發源地；T1 Base Camp 則是傳奇戰隊 T1 的大本營，結合電競文化與娛樂。"
       }},
       { id: "d4-3", time: "13:00", type: "food", title: "午餐：土俗村蔘雞湯", location: "Tosokchon Samgyetang", lat: 37.5779, lng: 126.9717, aiData: {
         tips: ["用餐高峰時段需排隊，建議提早前往。", "每桌提供免費的人蔘酒一杯。", "泡菜與醃蘿蔔在桌上甕中，可無限取用。"],
