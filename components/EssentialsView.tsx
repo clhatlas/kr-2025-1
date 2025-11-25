@@ -1,11 +1,60 @@
-import React from 'react';
-import { Plane, Home, Phone, AlertTriangle, FileText } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Plane, Home, Phone, AlertTriangle, FileText, Bell, BellRing, Check } from 'lucide-react';
 
 export const EssentialsView: React.FC = () => {
+  const [permission, setPermission] = useState<NotificationPermission>('default');
+
+  useEffect(() => {
+    if ('Notification' in window) {
+      setPermission(Notification.permission);
+    }
+  }, []);
+
+  const requestNotificationPermission = async () => {
+    if (!('Notification' in window)) {
+      alert('您的瀏覽器不支援通知功能');
+      return;
+    }
+
+    const result = await Notification.requestPermission();
+    setPermission(result);
+    
+    if (result === 'granted') {
+      new Notification('航班提醒已開啟', {
+        body: '我們將在航班起飛前 24 小時發送提醒通知。',
+        icon: 'https://cdn-icons-png.flaticon.com/512/2200/2200326.png' // Generic plane icon
+      });
+    }
+  };
+
   return (
     <div className="p-4 space-y-6 animate-in slide-in-from-bottom-4 duration-300">
       
-      <h2 className="text-2xl font-bold text-slate-800 px-1">旅程重要資訊</h2>
+      <div className="flex justify-between items-center px-1">
+        <h2 className="text-2xl font-bold text-slate-800">旅程重要資訊</h2>
+        
+        {/* Notification Button */}
+        <button 
+            onClick={requestNotificationPermission}
+            disabled={permission === 'granted'}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all shadow-sm
+                ${permission === 'granted' 
+                    ? 'bg-green-100 text-green-700 border border-green-200' 
+                    : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+                }
+            `}
+        >
+            {permission === 'granted' ? (
+                <>
+                    <BellRing size={14} /> 提醒已開啟
+                </>
+            ) : (
+                <>
+                    <Bell size={14} /> 開啟航班提醒
+                </>
+            )}
+        </button>
+      </div>
 
       {/* Flights */}
       <section className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">

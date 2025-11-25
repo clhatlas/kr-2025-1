@@ -1,5 +1,11 @@
 export type ActivityType = 'sightseeing' | 'food' | 'transport' | 'stay' | 'flight';
 
+export interface AIData {
+  tips: string[];
+  mustEat: string[];
+  history: string;
+}
+
 export interface Activity {
   id: string;
   time: string;
@@ -9,6 +15,7 @@ export interface Activity {
   details?: string;
   lat?: number;
   lng?: number;
+  aiData?: AIData;
 }
 
 export interface DayItinerary {
@@ -16,12 +23,6 @@ export interface DayItinerary {
   date: string;
   title: string;
   activities: Activity[];
-}
-
-export interface AIData {
-  tips: string[];
-  mustEat: string[];
-  history: string;
 }
 
 export interface WeatherInfo {

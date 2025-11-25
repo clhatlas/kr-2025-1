@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { MapPin, Navigation, Utensils, Info, Check, Car, Bed, Plane, Sparkles, ChevronDown, ChevronUp } from 'lucide-react';
-import { Activity, AIData } from '../types';
-import { fetchActivityInsights } from '../services/geminiService';
+import { Activity } from '../types';
 
 interface ActivityCardProps {
   activity: Activity;
@@ -11,8 +10,7 @@ interface ActivityCardProps {
 
 export const ActivityCard: React.FC<ActivityCardProps> = ({ activity, isCompleted, onToggle }) => {
   const [expanded, setExpanded] = useState(false);
-  const [aiData, setAiData] = useState<AIData | null>(null);
-  const [loadingAi, setLoadingAi] = useState(false);
+  const aiData = activity.aiData;
 
   const getIcon = () => {
     switch (activity.type) {
@@ -34,17 +32,9 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({ activity, isComplete
     }
   };
 
-  const handleAiAnalysis = async (e: React.MouseEvent) => {
+  const handleAiAnalysis = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (aiData) {
-        setExpanded(!expanded);
-        return;
-    }
-    setExpanded(true);
-    setLoadingAi(true);
-    const data = await fetchActivityInsights(activity.title, activity.location);
-    setAiData(data);
-    setLoadingAi(false);
+    setExpanded(!expanded);
   };
 
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(activity.location)}`;
@@ -64,11 +54,14 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({ activity, isComplete
 
   const navUrl = getNaverNavUrl();
 
+  // Only show button if we actually have hard-coded data
+  const showAiButton = !!aiData;
+
   return (
     <div className={`relative flex flex-col bg-white rounded-2xl shadow-sm border mb-4 transition-all duration-300 ${isCompleted ? 'border-slate-200 bg-slate-50 opacity-70' : 'border-slate-100'}`}>
       
       {/* Main Card Content */}
-      <div className="flex items-start p-4 gap-3 cursor-pointer" onClick={() => setExpanded(!expanded)}>
+      <div className="flex items-start p-4 gap-3 cursor-pointer" onClick={() => { if(showAiButton) setExpanded(!expanded) }}>
         {/* Checkbox Area */}
         <div className="pt-1">
           <button 
@@ -131,29 +124,26 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({ activity, isComplete
                 <Navigation size={14} /> Naver 導航
             </a>
             
+            {showAiButton && (
             <button
                 onClick={handleAiAnalysis}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold shadow-sm border transition-all
-                    ${aiData ? 'bg-purple-50 text-purple-700 border-purple-200' : 'bg-white text-slate-600 border-slate-200 hover:border-purple-300 hover:text-purple-600'}
+                    ${expanded ? 'bg-purple-50 text-purple-700 border-purple-200' : 'bg-white text-slate-600 border-slate-200 hover:border-purple-300 hover:text-purple-600'}
                 `}
             >
-                <Sparkles size={14} className={loadingAi ? 'animate-spin' : ''} />
-                {aiData ? '已分析' : 'AI 導遊攻略'}
+                <Sparkles size={14} />
+                {expanded ? '收起攻略' : '導遊攻略'}
             </button>
+            )}
           </div>
         </div>
       </div>
 
       {/* Expanded AI Content */}
-      {expanded && (
+      {expanded && aiData && (
         <div className="border-t border-slate-100 bg-slate-50/50 p-4 rounded-b-2xl animate-in fade-in slide-in-from-top-2 duration-200">
-           {loadingAi ? (
-             <div className="flex flex-col items-center justify-center py-4 space-y-2">
-                <div className="w-6 h-6 border-2 border-purple-200 border-t-purple-600 rounded-full animate-spin"></div>
-                <p className="text-xs text-purple-600 font-medium">AI 正在搜尋在地攻略...</p>
-             </div>
-           ) : aiData ? (
              <div className="space-y-4">
+                
                 {/* History */}
                 <div className="flex gap-3">
                     <div className="shrink-0 mt-0.5 text-purple-500"><Info size={16} /></div>
@@ -170,38 +160,4 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({ activity, isComplete
                         <h4 className="text-xs font-bold text-orange-900 uppercase tracking-wider mb-1">必吃美食</h4>
                         <div className="flex flex-wrap gap-2">
                             {aiData.mustEat.map((food, i) => (
-                                <span key={i} className="text-xs bg-white border border-orange-200 text-orange-700 px-2 py-1 rounded-md shadow-sm font-medium">
-                                    {food}
-                                </span>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-
-                {/* Tips */}
-                <div className="flex gap-3">
-                    <div className="shrink-0 mt-0.5 text-emerald-500"><Sparkles size={16} /></div>
-                    <div>
-                        <h4 className="text-xs font-bold text-emerald-900 uppercase tracking-wider mb-1">旅遊貼士</h4>
-                        <ul className="text-sm text-slate-700 space-y-1 list-disc list-outside pl-3">
-                            {aiData.tips.map((tip, i) => (
-                                <li key={i}>{tip}</li>
-                            ))}
-                        </ul>
-                    </div>
-                </div>
-
-                <div className="text-center pt-2">
-                    <button onClick={() => setExpanded(false)} className="text-slate-400 hover:text-slate-600">
-                        <ChevronUp size={20} className="mx-auto" />
-                    </button>
-                </div>
-             </div>
-           ) : (
-             <div className="text-center py-2 text-sm text-red-400">無法取得資訊，請稍後再試。</div>
-           )}
-        </div>
-      )}
-    </div>
-  );
-};
+                                <span key={i} className="text-xs bg-white border border

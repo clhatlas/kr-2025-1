@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Plane, Calendar, Wallet, CheckCircle2 } from 'lucide-react';
-import { ITINERARY_DATA } from './constants';
+import { ITINERARY_DATA, FLIGHT_SCHEDULE } from './constants';
 import { ItineraryView } from './components/ItineraryView';
 import { EssentialsView } from './components/EssentialsView';
 import { BudgetView } from './components/BudgetView';
@@ -27,6 +27,40 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem('completedItems', JSON.stringify(Array.from(completedItems)));
   }, [completedItems]);
+
+  // Flight Notification Check Logic
+  useEffect(() => {
+    const checkFlightReminders = () => {
+      if (!('Notification' in window) || Notification.permission !== 'granted') return;
+
+      const now = new Date().getTime();
+      const TWENTY_FOUR_HOURS = 24 * 60 * 60 * 1000;
+
+      FLIGHT_SCHEDULE.forEach(flight => {
+        const flightTime = new Date(flight.time).getTime();
+        const timeDiff = flightTime - now;
+        const storageKey = `notified_${flight.id}`;
+
+        // If within 24 hours AND in the future AND not yet notified
+        if (timeDiff > 0 && timeDiff <= TWENTY_FOUR_HOURS) {
+           const hasNotified = localStorage.getItem(storageKey);
+           
+           if (!hasNotified) {
+             new Notification(flight.title, {
+               body: flight.message,
+               icon: 'https://cdn-icons-png.flaticon.com/512/2200/2200326.png',
+               tag: flight.id // Prevents duplicate notifications on some systems
+             });
+             
+             // Mark as notified to avoid spamming on reload
+             localStorage.setItem(storageKey, 'true');
+           }
+        }
+      });
+    };
+
+    checkFlightReminders();
+  }, []);
 
   const toggleItem = (id: string) => {
     setCompletedItems(prev => {
