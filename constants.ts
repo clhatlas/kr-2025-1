@@ -4,7 +4,7 @@ export const ITINERARY_DATA: DayItinerary[] = [
   {
     day: 1,
     date: "12月17日 (週二)",
-    title: "仁川抵達 & 露營",
+    title: "仁川抵達 & 行車",
     activities: [
       { id: "d1-1", time: "05:30", type: "flight", title: "抵達仁川機場 (ICN)", location: "Incheon International Airport", lat: 37.4602, lng: 126.4407 },
       { id: "d1-2", time: "06:30", type: "sightseeing", title: "Cimer SPA & 汗蒸幕", location: "Paradise City Cimer", details: "放鬆3小時，體驗韓式桑拿", lat: 37.4495, lng: 126.4267 },
@@ -19,7 +19,7 @@ export const ITINERARY_DATA: DayItinerary[] = [
   {
     day: 2,
     date: "12月18日 (週三)",
-    title: "南怡島 & 晨靜樹木園",
+    title: "南怡島 & 小法國村 & 晨靜樹木園",
     activities: [
       { id: "d2-1", time: "09:30", type: "transport", title: "抵達南怡島碼頭", location: "Nami Island Wharf", lat: 37.7913, lng: 127.5256 },
       { id: "d2-2", time: "10:00", type: "sightseeing", title: "南怡島遊覽", location: "Nami Island", details: "遊覽約3小時", lat: 37.7913, lng: 127.5256 },

@@ -48,7 +48,21 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({ activity, isComplete
   };
 
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(activity.location)}`;
-  const navUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(activity.location)}&travelmode=driving`;
+  
+  // Naver Map App URL Scheme
+  // Docs: https://guide.ncloud-docs.com/docs/en/naveropenapiv3-maps-url-scheme-url-scheme
+  const getNaverNavUrl = () => {
+    const appName = 'KoreaTrip2025';
+    if (activity.lat && activity.lng) {
+        // route/car: Driving directions from current location to destination
+        return `nmap://route/car?dlat=${activity.lat}&dlng=${activity.lng}&dname=${encodeURIComponent(activity.title)}&appname=${appName}`;
+    } else {
+        // Fallback to search if coordinates are missing
+        return `nmap://search?query=${encodeURIComponent(activity.location)}&appname=${appName}`;
+    }
+  };
+
+  const navUrl = getNaverNavUrl();
 
   return (
     <div className={`relative flex flex-col bg-white rounded-2xl shadow-sm border mb-4 transition-all duration-300 ${isCompleted ? 'border-slate-200 bg-slate-50 opacity-70' : 'border-slate-100'}`}>
@@ -108,14 +122,13 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({ activity, isComplete
             >
                 <MapPin size={14} /> 地圖
             </a>
+            
             <a 
                 href={navUrl} 
-                target="_blank" 
-                rel="noopener noreferrer"
                 onClick={(e) => e.stopPropagation()}
-                className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 border border-blue-600 rounded-lg text-xs font-semibold text-white hover:bg-blue-700 shadow-sm shadow-blue-200"
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-[#03C75A] border border-[#03C75A] rounded-lg text-xs font-semibold text-white hover:bg-[#02b350] shadow-sm shadow-green-100"
             >
-                <Navigation size={14} /> 導航
+                <Navigation size={14} /> Naver 導航
             </a>
             
             <button

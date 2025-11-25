@@ -17,7 +17,7 @@ export const EssentialsView: React.FC = () => {
             <div className="flex justify-between items-center border-b border-slate-50 pb-3">
                 <div>
                     <span className="text-xs font-bold text-slate-400 uppercase">去程 (TW644)</span>
-                    <div className="font-bold text-slate-800 text-lg">TPE ➝ ICN</div>
+                    <div className="font-bold text-slate-800 text-lg">HKG ➝ ICN</div>
                     <div className="text-sm text-slate-500">12/17 抵達 05:30</div>
                 </div>
                 <div className="text-right">
@@ -27,7 +27,7 @@ export const EssentialsView: React.FC = () => {
             <div className="flex justify-between items-center">
                 <div>
                     <span className="text-xs font-bold text-slate-400 uppercase">回程 (UO615)</span>
-                    <div className="font-bold text-slate-800 text-lg">ICN ➝ HKG/TPE</div>
+                    <div className="font-bold text-slate-800 text-lg">ICN ➝ HKG</div>
                     <div className="text-sm text-slate-500">12/21 起飛 02:20</div>
                 </div>
                 <div className="text-right">
@@ -94,7 +94,7 @@ export const EssentialsView: React.FC = () => {
                 '護照 (有效期6個月以上)',
                 'K-ETA 或 Q-CODE (若適用)',
                 '國際駕照 (租車必備)',
-                '台灣/香港駕照正本 (租車必備)',
+                '香港駕照正本 (租車必備)',
                 '信用卡 (海外開通)',
                 'WOWPASS / T-Money 卡'
             ].map((item, i) => (

@@ -4,7 +4,6 @@ import { ITINERARY_DATA } from './constants';
 import { ItineraryView } from './components/ItineraryView';
 import { EssentialsView } from './components/EssentialsView';
 import { BudgetView } from './components/BudgetView';
-import { GoogleGenAI } from "@google/genai";
 
 // Initialize AI Client (Safe to initialize here as we use env var in services, 
 // but checking if key exists is good practice for UI feedback)

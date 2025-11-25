@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>韓國冬季五日遊</title>
     <script>
-      // Polyfill process.env for browser environment to support Gemini SDK
-      // The placeholder __GEMINI_API_KEY__ will be replaced by Netlify build command using sed
+      // Polyfill process.env for browser environment
+      // The placeholder __API_KEY__ will be replaced by Netlify build command using sed
       window.process = {
         env: {
-          API_KEY: '__GEMINI_API_KEY__'
+          API_KEY: '__API_KEY__'
         }
       };
     </script>
